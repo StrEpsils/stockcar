@@ -3,4 +3,4 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/stockcar?useSSL=false
     username: root
-    password: DExaOEG
+    password: root
