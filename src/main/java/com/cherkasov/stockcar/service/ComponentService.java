@@ -20,6 +20,9 @@ public class ComponentService {
         return componentMapper.selectAllComponent();
     }
 
+    /**
+     * @return список всех автомобилей
+     */
     public List<Component> getAllAuto(){
         return componentMapper.selectAllAuto();
     }
@@ -47,8 +50,8 @@ public class ComponentService {
      * @param name название
      * @return измененая деталь
      */
-    public Component updateComponentById(int id_component, String name){
-        return componentMapper.updateComponentById(id_component, name);
+    public void updateComponentById(int id_component, String name){
+        componentMapper.updateComponentById(id_component, name);
     }
 
     /**
@@ -56,11 +59,33 @@ public class ComponentService {
      * @param name
      * @return
      */
-    public Component addNewComponent(String name){
-        return componentMapper.addNewComponentWithoutId(name);
+    public void addNewComponent(String name){
+        componentMapper.addNewComponentWithoutId(name);
     }
 
+    /**
+     * Обновляем ссылку на дочерние детали
+     * @param id_component деталь которой надо присвоить индекс
+     * @param link_component ссылка на деталь которая должна быть дочерней
+     */
     public void updateAssambleComponent(int id_component, int link_component){
          componentMapper.updateAssambleToComponent(id_component, link_component);
+    }
+
+    /**
+     * Получаем автомобиль со списком деталей
+     * @param id_auto uid автомобиля
+     * @return автомобиль со списком дочерних деталей
+     */
+    public Component getAutoWithComponents(int id_auto) {
+        return componentMapper.selectAutoWithComponents(id_auto);
+    }
+
+    /**
+     * Добавление нового автомобиля
+     * @param name наименование автомобиля
+     */
+    public void addNewAuto(String name) {
+        componentMapper.addNewAuto(name);
     }
 }

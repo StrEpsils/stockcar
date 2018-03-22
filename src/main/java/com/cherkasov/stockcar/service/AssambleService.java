@@ -30,6 +30,12 @@ public class AssambleService {
         return assambleMapper.getIndex();
     }
 
+    /**
+     * Добавляем к индексу указание на деталь,
+     * которая является частью сборки другой детали
+     * @param link_component uid детали
+     * @param index индекс указанный в родительской детали
+     */
     public void addAssamble(int link_component, int index) {
          assambleMapper.addAssambleToComponent(link_component, index);
     }

@@ -2,10 +2,13 @@ package com.cherkasov.stockcar.controllers;
 
 import com.cherkasov.stockcar.entity.Component;
 import com.cherkasov.stockcar.service.ComponentService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,15 +16,49 @@ import java.util.List;
 @RequestMapping("/api/auto")
 public class AutoController {
 
+    /**
+     * Автомобиль считается конечной деталью, включающая в себя составные детали
+     * uid автомобиля это uid - детали (запись с полем ending = true)
+     */
+
     @Autowired
     ComponentService componentService;
-
+    
     /**
      * Получаем список автомобилей
      * @return список авто
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public List<Component> getAllAuto(){
-        return componentService.getAllAuto();
+    public ResponseEntity<List<Component>> getAllAuto(){
+        try {
+            return new ResponseEntity<>(componentService.getAllAuto(), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Получаем автомобиль со списком деталей
+     * @param id_auto автомобиля
+     * @return автомобиль со списком деталей
+     */
+    @RequestMapping(value = "/{id_auto}")
+    public ResponseEntity<Component> getAutoWithComponents(@PathVariable int id_auto){
+        return new ResponseEntity<>(componentService.getAutoWithComponents(id_auto), HttpStatus.OK);
+    }
+
+    /**
+     * Добавляем запись об новом автомобиле
+     * @param name название автомобиля
+     * @return статус Http запроса на добавление нового автомобиля
+     */
+    @RequestMapping(value = "/add", params = {"name"}, method = RequestMethod.POST)
+    public ResponseEntity<Void> addNewAuto(@RequestParam String name){
+        try {
+            componentService.addNewAuto(name);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

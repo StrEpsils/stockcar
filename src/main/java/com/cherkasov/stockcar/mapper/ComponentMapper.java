@@ -61,7 +61,7 @@ public interface ComponentMapper {
      * @return деталь
      */
     @Update("Update component set name = #{name} where id_component = #{id_component}")
-    public Component updateComponentById(@Param("id_component") int id_component,@Param("name") String name);
+    public void updateComponentById(@Param("id_component") int id_component,@Param("name") String name);
 
     /**
      * Добавление записи по новой детали
@@ -69,7 +69,7 @@ public interface ComponentMapper {
      * @return новая запись
      */
     @Insert("Insert into component(name) values (#{name})")
-    public Component addNewComponentWithoutId(@Param("name") String name);
+    public void addNewComponentWithoutId(@Param("name") String name);
 
     /**
      * Добавляем ссылку на дочернюю деталь
@@ -79,4 +79,22 @@ public interface ComponentMapper {
     @Update("Update component set id_assamble = #{id_assamble} where id_component = #{id_component}")
     public void updateAssambleToComponent(@Param("id_component") int id_component, @Param("id_assamble") int id_assamble);
 
+    /**
+     * Получение автомобиля с его деталями
+     * @param id_component uid автомобиля
+     * @return автомобиль с деталями
+     */
+    @Select("Select * from component where id_component = #{id_component} and ending = true")
+    @Results(value = {
+            @Result(property = "assamble", column = "id_assamble",
+                    many = @Many(select = "com.cherkasov.stockcar.mapper.AssambleMapper.selectAssambleByIdWhithComponent"))
+    })
+    public Component selectAutoWithComponents(int id_component);
+
+    /**
+     * Добавление нового автомобиля
+     * @param name название автомобиля
+     */
+    @Insert("Insert into component(name, ending) values (#{name}, 1)")
+    public void addNewAuto(@Param("name") String name);
 }
