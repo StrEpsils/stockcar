@@ -48,7 +48,6 @@ public class ComponentService {
      * Обновление детали по uid
      * @param id_component детали
      * @param name название
-     * @return измененая деталь
      */
     public void updateComponentById(int id_component, String name){
         componentMapper.updateComponentById(id_component, name);
@@ -57,7 +56,6 @@ public class ComponentService {
     /**
      * Добавление новой детали
      * @param name
-     * @return
      */
     public void addNewComponent(String name){
         componentMapper.addNewComponentWithoutId(name);
@@ -87,5 +85,17 @@ public class ComponentService {
      */
     public void addNewAuto(String name) {
         componentMapper.addNewAuto(name);
+    }
+
+    /**
+     * Удаляем компонент или авто
+     * @param id_auto uid компонта - автомобиля
+     */
+    public void deleteComponent(int id_auto) {
+        componentMapper.deleteComponentById(id_auto);
+    }
+
+    public int getLastInsertComponent() {
+        return componentMapper.lastIndex();
     }
 }
