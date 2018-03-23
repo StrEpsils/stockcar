@@ -25,7 +25,7 @@ public interface ComponentMapper {
 
     /**
      * Получаем список готовых сборок автомобиля
-     * @return
+     * @return список автомобилей
      */
     @Select(selectFinalAuto)
     public List<Component> selectAllAuto();
@@ -58,7 +58,6 @@ public interface ComponentMapper {
      * Обновление записи детали по uid
      * @param id_component детали
      * @param name название детали
-     * @return деталь
      */
     @Update("Update component set name = #{name} where id_component = #{id_component}")
     public void updateComponentById(@Param("id_component") int id_component,@Param("name") String name);
@@ -66,7 +65,6 @@ public interface ComponentMapper {
     /**
      * Добавление записи по новой детали
      * @param name наименование
-     * @return новая запись
      */
     @Insert("Insert into component(name) values (#{name})")
     public void addNewComponentWithoutId(@Param("name") String name);
@@ -93,8 +91,23 @@ public interface ComponentMapper {
 
     /**
      * Добавление нового автомобиля
+     * isEnding = true
      * @param name название автомобиля
      */
-    @Insert("Insert into component(name, ending) values (#{name}, 1)")
+    @Insert("Insert into component(name, ending) values (#{name}, true)")
     public void addNewAuto(@Param("name") String name);
+
+    /**
+     * Удаляем запись об компоненте или автомобиле по uid
+     * @param id_component uid компонента - автомобиля
+     */
+    @Delete("Delete from component where id_component = #{id_component}")
+    public void deleteComponentById(@Param("id_component") int id_component);
+
+    /**
+     * Получаем последний добавленной детали
+     * @return индекс последней детали
+     */
+    @Select("Select max(id_component) from component")
+    public Integer lastIndex();
 }

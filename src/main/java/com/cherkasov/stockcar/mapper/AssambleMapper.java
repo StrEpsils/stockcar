@@ -28,7 +28,8 @@ public interface AssambleMapper {
      * @return список дочерних деталей
      */
     @Select(selectAssambleById)
-    @Results(value = @Result(property = "component", column = "id_component", many = @Many(select = "com.cherkasov.stockcar.mapper.ComponentMapper.findById")))
+    @Results(value = @Result(property = "component", column = "id_component",
+            many = @Many(select = "com.cherkasov.stockcar.mapper.ComponentMapper.findById")))
     public List<Assamble> selectAssambleByIdWhithComponent(int id_assamble);
 
     /**
