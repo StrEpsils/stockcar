@@ -18,7 +18,7 @@ public class AutoController {
 
     /**
      * Автомобиль считается конечной деталью, включающая в себя составные детали
-     * uid автомобиля это uid - детали (запись с полем ending = true)
+     * uid автомобиля - это uid детали (запись с полем ending = true)
      */
 
     @Autowired
@@ -57,6 +57,26 @@ public class AutoController {
         try {
             componentService.addNewAuto(name);
             return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    /**
+     * Удаляем запись с машиной по uid
+     * @param id uid автомобиля
+     * @return статус HTTP запроса на удаление автомобиля
+     */
+    @RequestMapping(value = "/delete", params = {"id"}, method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteAuto(@RequestParam int id){
+        try{
+            //Если машина бабахаем ее
+            if(componentService.getComponentById(id).isEnding()){
+                componentService.deleteComponent(id);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

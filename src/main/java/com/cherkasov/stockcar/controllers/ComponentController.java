@@ -34,7 +34,7 @@ public class ComponentController {
 
     /**
      * Получаем список всех деталей
-     * @return list all components
+     * @return Список всех компонентов без автомобилей
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<List<Component>> getAllComponents(){
@@ -126,6 +126,25 @@ public class ComponentController {
             }
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Удаление записи компонента по uid
+     * @param id uid компонента
+     * @return статус HTTP запроса на удаление компонента
+     */
+    @RequestMapping(value = "/delete", params = {"id"})
+    public ResponseEntity<Void> deleteComponent(@RequestParam int id){
+        try{
+            if(!componentService.getComponentById(id).isEnding()){
+                componentService.deleteComponent(id);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
